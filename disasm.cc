@@ -29,6 +29,14 @@
  **                              DisasmSection                                **
  ******************************************************************************/
 void
+DisasmSection::serialize_BBs(FILE* out)
+{
+  sort_BBs();
+  for(auto &bb: BBs) {
+	  bb.serialize(out);
+  }
+}
+void
 DisasmSection::print_BBs(FILE *out)
 {
   fprintf(out, "<Section %s %s @0x%016jx (size %ju)>\n\n", 

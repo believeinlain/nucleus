@@ -129,3 +129,20 @@ export_cfg2dot(std::string &fname, CFG *cfg)
   return 0;
 }
 
+int
+export_bbjson(std::string &fname, std::list<DisasmSection>* disasm)
+{
+	FILE *f;
+	f = fopen(fname.c_str(), "w");
+	if(!f) {
+		print_err("cannot open file '%s' for writing", fname.c_str());
+		return -1;
+	}
+
+    for(auto &dis: *disasm) {
+      dis.serialize_BBs(f);
+    }
+
+	fclose(f);
+	return 0;
+}

@@ -81,6 +81,9 @@ main(int argc, char *argv[])
   if(!options.exports.dot.empty()) {
     (void)export_cfg2dot(options.exports.dot, &cfg);
   }
+  if(!options.exports.bb_json.empty()) {
+	(void)export_bbjson(options.exports.bb_json, &disasm);
+  }
 
   unload_binary(&bin);
 

@@ -26,6 +26,7 @@ struct options {
     std::string ida;
     std::string binja;
     std::string dot;
+	std::string bb_json;
   } exports;
 
   struct {

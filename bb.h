@@ -33,6 +33,7 @@ public:
   bool returns      ();
 
   void print(FILE *out);
+  void serialize(FILE *out);
 
   static bool comparator (BB& bb, BB& cc)     { return bb.start < cc.start; }
   inline bool operator<  (const BB& cc) const { return this->start < cc.start; }

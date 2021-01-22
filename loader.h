@@ -5,6 +5,12 @@
 #include <string>
 #include <vector>
 
+/* RN replace old macros */
+#define bfd_get_section_flags(bfd, ptr) ((void) bfd, (ptr)->flags)
+#define bfd_get_section_userdata(bfd, ptr) ((void) bfd, (ptr)->userdata)
+#define bfd_get_section_vma(bfd, ptr) ((void) bfd, (ptr)->vma)
+#define bfd_get_section_size(ptr) ((ptr)->size)
+
 class Binary;
 class Section;
 class Symbol;
@@ -31,14 +37,14 @@ public:
     SEC_TYPE_DATA = 2
   };
 
-  Section() : binary(NULL), type(0), vma(0), size(0), bytes(NULL) {}
+  Section() : binary(NULL), type(SEC_TYPE_NONE), vma(0), size(0), bytes(NULL) {}
 
   bool contains        (uint64_t addr) { return (addr >= vma) && (addr-vma < size); }
   bool is_import_table ()              { return name == ".plt"; }
 
   Binary       *binary;
   std::string   name;
-  unsigned      type;
+  SectionType   type;
   uint64_t      vma;
   uint64_t      size;
   uint8_t       *bytes;
@@ -50,7 +56,8 @@ public:
     BIN_TYPE_AUTO = 0,
     BIN_TYPE_RAW  = 1,
     BIN_TYPE_ELF  = 2,
-    BIN_TYPE_PE   = 3
+    BIN_TYPE_PE   = 3,
+    BIN_TYPE_MACH = 4
   };
   enum BinaryArch {
     ARCH_NONE    = 0,
@@ -58,15 +65,18 @@ public:
     ARCH_ARM     = 2,
     ARCH_MIPS    = 3,
     ARCH_PPC     = 4,
-    ARCH_X86     = 5
+    ARCH_X86     = 5,
+    ARCH_RISCV   = 6
   };
 
-  Binary() : type(0), arch(0), bits(0), entry(0) {}
+  Binary() : type(BIN_TYPE_AUTO), arch(ARCH_NONE), bits(0), entry(0) {}
+
+  Section *get_text_section() { for(auto &s : sections) if(s.name == ".text") return &s; return NULL; }
 
   std::string          filename;
-  unsigned             type;
+  BinaryType           type;
   std::string          type_str;
-  unsigned             arch;
+  BinaryArch           arch;
   std::string          arch_str;
   unsigned             bits;
   uint64_t             entry;

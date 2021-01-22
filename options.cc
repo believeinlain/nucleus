@@ -55,6 +55,8 @@ print_usage(char *prog)
   printf("  -v : verbose\n");
   printf("  -w : disable warnings\n");
   printf("  -h : help\n");
+  printf("  -j <file>\n");
+  printf("     : export basic blocks as JSON\n");
   printf("\nConfiguration used in paper 'Compiler-Agnostic Function Detection in Binaries':\n");
   printf("    %s -d linear -f -e <binary>\n", prog);
   printf("\n");
@@ -65,7 +67,7 @@ int
 parse_options(int argc, char *argv[])
 {
   int i, opt;
-  char optstr[] = "vwhd:t:a:fb:Dpg:i:n:e:";
+  char optstr[] = "vwhd:t:a:fb:Dpg:i:n:e:j:";
   extern const char *binary_types_descr[][2];
   extern const char *binary_arch_descr[][2];
   std::string s;
@@ -161,6 +163,10 @@ parse_options(int argc, char *argv[])
     case 'g':
       options.exports.dot = std::string(optarg);
       break;
+
+	case 'j':
+	  options.exports.bb_json = std::string(optarg);
+	  break;
 
     case 'i':
       options.exports.ida = std::string(optarg);

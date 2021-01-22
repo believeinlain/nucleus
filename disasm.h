@@ -49,6 +49,7 @@ public:
   DisasmSection() : section(NULL) {}
 
   void print_BBs(FILE *out);
+  void serialize_BBs(FILE *out);
 
   Section              *section;
   AddressMap            addrmap;

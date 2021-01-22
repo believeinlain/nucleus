@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <vector>
+#include <nlohmann/json.hpp>
 
 #include "bb.h"
 #include "insn.h"
@@ -30,6 +32,29 @@ BB::print(FILE *out)
     }
   }
   fprintf(out, "}\n\n");
+}
+
+void
+BB::serialize(FILE *out)
+{
+  using json = nlohmann::json;
+  json j;
+  j["address"] = start;
+  std::vector<uint64_t> target_addr;
+  std::vector<uint64_t> ancestor_addr;
+  if(!ancestors.empty()) {
+    for(auto &e: ancestors) {
+	  ancestor_addr.push_back(e.src->insns.back().start);
+    }
+  }
+  if(!targets.empty()) {
+    for(auto &e: targets) {
+	  target_addr.push_back(e.dst->start+e.offset);
+    }
+  }
+  j["ancestors"] = ancestor_addr;
+  j["targets"] = target_addr;
+  fprintf(out, "%s\n", j.dump().c_str());
 }
 
 
