@@ -40,6 +40,7 @@ BB::serialize(FILE *out)
   using json = nlohmann::json;
   json j;
   j["address"] = start;
+  j["end"] = end;
   std::vector<uint64_t> target_addr;
   std::vector<uint64_t> ancestor_addr;
   if(!ancestors.empty()) {

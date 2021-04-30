@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <assert.h>
+#include <string.h>
 
 #include <vector>
 #include <list>
@@ -33,7 +34,9 @@ DisasmSection::serialize_BBs(FILE* out)
 {
   sort_BBs();
   for(auto &bb: BBs) {
-	  bb.serialize(out);
+	  if (strcmp(section->name.c_str(), ".text") == 0){
+		  bb.serialize(out);
+	  }
   }
 }
 void

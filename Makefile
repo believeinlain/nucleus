@@ -6,7 +6,7 @@ SRC=$(wildcard *.cc)
 OBJ=$(patsubst %.cc, obj/%.o, $(SRC))
 BIN=nucleus
 
-.PHONY: all clean setup
+.PHONY: all clean setup install
 
 all: $(BIN)
 
@@ -28,4 +28,7 @@ clean:
 	rm -f $(OBJ)
 	rm -Rf obj
 	rm -f $(BIN)
+
+install: $(BIN)
+	sudo cp $< /usr/local/bin/
 
