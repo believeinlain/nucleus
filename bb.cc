@@ -34,6 +34,7 @@ BB::print(FILE *out)
   fprintf(out, "}\n\n");
 }
 
+
 void
 BB::serialize(FILE *out)
 {
@@ -43,6 +44,7 @@ BB::serialize(FILE *out)
   j["end"] = end;
   std::vector<uint64_t> target_addr;
   std::vector<uint64_t> ancestor_addr;
+  std::vector<uint64_t> insn_addr;
   if(!ancestors.empty()) {
     for(auto &e: ancestors) {
 	  ancestor_addr.push_back(e.src->insns.back().start);
@@ -53,8 +55,14 @@ BB::serialize(FILE *out)
 	  target_addr.push_back(e.dst->start+e.offset);
     }
   }
+  if(!insns.empty()) {
+    for(auto &e: insns) {
+    insn_addr.push_back(e.start);
+    }
+  }
   j["ancestors"] = ancestor_addr;
   j["targets"] = target_addr;
+  j["instructions"] = insn_addr;
   fprintf(out, "%s\n", j.dump().c_str());
 }
 
@@ -78,4 +86,3 @@ BB::returns()
 {
   return (insns.back().flags & Instruction::INS_FLAG_RET);
 }
-
